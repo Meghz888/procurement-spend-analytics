@@ -55,6 +55,13 @@ A total of 77 records with negative planned lead times were flagged and excluded
 **Methodology:** Planned lead time is calculated as PO due date minus PO creation date. It does not measure actual supplier delivery performance.
 
 All monetary values represent USD-equivalent purchase order values. Currency categories refer to the original transaction currency, not the currency of the reported monetary amount.
+### Currency Normalisation
+
+The source dataset contains purchase orders originally issued in six currencies: USD, ZAR, EUR, AUD, CAD and GBP.
+
+All monetary values used in this analysis were already converted to USD in the source export. The original transaction currency was retained as a separate field to enable analysis of purchasing activity by currency.
+
+Consequently, all reported purchase-order values, including the $588.01M portfolio total, are expressed in USD-equivalent amounts. No additional currency conversion was performed in SQL or Power BI.
 
 ## Tools & Technologies
 
@@ -70,8 +77,7 @@ All monetary values represent USD-equivalent purchase order values. Currency cat
 Procurement-Spend-Analytics/
 ├── dax/
 │   └── measures.dax
-├── powerbi/
-│   └── Procurement_Analytics_Dashboard.pbix
+├── powerbi/                 # PBIX excluded from public repository
 ├── screenshots/
 │   └── dashboard_overview.png
 ├── sql/
@@ -92,7 +98,13 @@ Procurement-Spend-Analytics/
 
 ## Data Availability
 
-The underlying source dataset is not publicly distributed. SQL scripts and dashboard documentation are provided to demonstrate the analytical approach.
+### Data Availability
+
+The underlying purchase-order dataset is not publicly distributed to protect confidential business information.
+
+The Power BI `.pbix` file is also excluded from the public repository because it contains imported row-level data.
+
+The repository includes SQL scripts, DAX measures, project documentation and a dashboard screenshot to demonstrate the analytical methodology and reporting capabilities.
 
 ## Future Improvements
 
