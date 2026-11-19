@@ -54,7 +54,6 @@ A total of 77 records with negative planned lead times were flagged and excluded
 
 **Methodology:** Planned lead time is calculated as PO due date minus PO creation date. It does not measure actual supplier delivery performance.
 
-All monetary values represent USD-equivalent purchase order values. Currency categories refer to the original transaction currency, not the currency of the reported monetary amount.
 ### Currency Normalisation
 
 The source dataset contains purchase orders originally issued in six currencies: USD, ZAR, EUR, AUD, CAD and GBP.
@@ -97,8 +96,6 @@ Procurement-Spend-Analytics/
 ```
 
 ## Data Availability
-
-### Data Availability
 
 The underlying purchase-order dataset is not publicly distributed to protect confidential business information.
 
