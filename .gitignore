@@ -1,0 +1,15 @@
+# Keep source data private
+data/*
+!data/.gitkeep
+
+# Power BI files may contain imported row-level data
+*.pbix
+
+# Local credentials and configuration
+.env
+*.env
+*.pgpass
+
+# Temporary files
+*.tmp
+*.bak

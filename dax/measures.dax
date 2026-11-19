@@ -1,0 +1,37 @@
+-- Total USD-equivalent purchase order value
+Total PO Value USD =
+SUM('staging purchase_orders'[document_total_usd])
+
+-- Number of purchase orders
+Total Purchase Orders =
+COUNTROWS('staging purchase_orders')
+
+-- Number of distinct suppliers
+Total Suppliers =
+DISTINCTCOUNT('staging purchase_orders'[vendor])
+
+-- Average planned lead time, excluding negative values
+Avg Planned Lead Time =
+CALCULATE(
+    AVERAGE('staging purchase_orders'[lead_time_days]),
+    'staging purchase_orders'[lead_time_days] >= 0
+)
+
+-- Purchase orders with negative planned lead times
+Negative Lead Time Orders =
+CALCULATE(
+    COUNTROWS('staging purchase_orders'),
+    'staging purchase_orders'[lead_time_days] < 0
+)
+
+-- Calculated column: First day of each PO month
+PO Month =
+DATE(
+    YEAR('staging purchase_orders'[po_date]),
+    MONTH('staging purchase_orders'[po_date]),
+    1
+)
+
+-- Calculated column: PO year
+PO Year =
+YEAR('staging purchase_orders'[po_date])
