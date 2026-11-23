@@ -19,3 +19,5 @@ CREATE TABLE IF NOT EXISTS raw.purchase_orders_raw (
     source_file_name TEXT NOT NULL,
     import_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE UNIQUE INDEX IF NOT EXISTS ux_purchase_orders_source_row
+ON raw.purchase_orders_raw (source_file_name, source_row_id_raw);

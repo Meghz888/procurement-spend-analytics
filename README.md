@@ -24,7 +24,7 @@ All purchase-order records, suppliers, mining operations and financial values ar
 
 ## Key Metrics
 
-**Purchase-order grain:** Each staging-table record represents one distinct purchase order. Therefore, the 14,037 record count is also the unique purchase-order count.
+**Purchase-order grain:** Each staging-table record represents one distinct purchase order. The synthetic dataset contains 14,500 purchase orders, with one record per purchase order.
 
 | Metric | Result |
 |---|---:|
@@ -45,15 +45,13 @@ All purchase-order records, suppliers, mining operations and financial values ar
 
 ## Key Findings
 
-**Mine comparison:** Mine Alpha accounts for approximately $344M in purchase order value, followed by Mine Gamma ($123M) and Mine Beta ($121M).
+**Mine comparison:** Purchase-order value is analysed across three fictional mining operations to identify differences in purchasing activity and value distribution.
 
-**Supplier concentration:** The largest supplier accounts for approximately $86M in purchase order value.
+**Supplier concentration:** Supplier Pareto analysis shows that 57 of 350 suppliers (16.29%) account for 80.02% of total simulated procurement spend.
 
-**Monthly trends:** Purchasing value fluctuates significantly, with a notable peak of approximately $32M in late 2023.
+**Monthly trends:** Monthly purchase-order value fluctuates throughout 2022–2025, demonstrating variations in simulated procurement activity.
 
-**Currency mix:** USD-originated orders represent the largest share of total USD-equivalent PO value.
-
-**Lead-time analysis:** Average planned lead times are approximately 43.5 days for Mines Alpha and Gamma, compared with 35.8 days for Mine Beta.
+**Lead-time analysis:** The synthetic dataset has an overall average planned lead time of 40.85 days, excluding 91 records with negative planned lead times. Planned lead time measures the interval between purchase order creation and the expected due date, not actual supplier delivery performance.
 
 ## Data Preparation & Quality
 
@@ -63,17 +61,15 @@ The project uses a three-layer PostgreSQL architecture:
 2. **Staging:** Standardises data types, currency labels and calculated fields.
 3. **Analytics:** Uses SQL queries to answer procurement business questions.
 
-A total of 77 records with negative planned lead times were flagged and excluded from lead-time statistics without being deleted.
+A total of **91 purchase orders (0.63%)** have negative planned lead times. These records were flagged for data-quality review and excluded from average lead-time calculations without being deleted from the dataset.
 
 **Methodology:** Planned lead time is calculated as PO due date minus PO creation date. It does not measure actual supplier delivery performance.
 
 ### Currency Normalisation
 
-The source dataset contains purchase orders originally issued in six currencies: USD, ZAR, EUR, AUD, CAD and GBP.
+The project uses a fully synthetic procurement dataset. Purchase-order values are represented in USD-equivalent amounts, while the original transaction currency is retained for comparative analysis.
 
-All monetary values used in this analysis were already converted to USD in the source export. The original transaction currency was retained as a separate field to enable analysis of purchasing activity by currency.
-
-Consequently, all reported purchase-order values, including the $588.01M portfolio total, are expressed in USD-equivalent amounts. No additional currency conversion was performed in SQL or Power BI.
+All reported spending figures, including the $416.79M total purchase-order value, are expressed in USD-equivalent terms. No additional foreign exchange conversion is performed in the SQL analysis or Power BI dashboard.
 
 ## Tools & Technologies
 
@@ -87,11 +83,14 @@ Consequently, all reported purchase-order values, including the $588.01M portfol
 
 ```text
 Procurement-Spend-Analytics/
+├──scripts/
+|   └── generate_synthetic_data.py
 ├── dax/
 │   └── measures.dax
 ├── powerbi/                 # PBIX excluded from public repository
 ├── screenshots/
 │   └── dashboard_overview.png
+|   └── supplier_pareto.png
 ├── sql/
 │   ├── analytics/
 │   │   ├── 07_spend_by_mine.sql
@@ -99,6 +98,7 @@ Procurement-Spend-Analytics/
 │   │   ├── 09_spend_by_currency.sql
 │   │   ├── 10_monthly_spend.sql
 │   │   └── 11_lead_time_analysis.sql
+|   |   └── 12_supplier_pareto_analysis.sql
 │   ├── 01_create_schemas.sql
 │   ├── 02_create_raw_tables.sql
 │   ├── 03_import_csv.sql
@@ -133,7 +133,45 @@ The Power BI Pareto visual includes supplier spend rankings, cumulative spend pe
 
 ## Future Improvements
 
-- Supplier segmentation and concentration risk assessment
+- Supplier segmentation and concentration risk scoring
 - Year-over-year procurement value comparisons
 - Additional data-quality checks
 - Supplier performance analysis using actual delivery dates when available
+
+## How to Reproduce This Project
+
+### 1. Generate the Synthetic Dataset
+
+The project includes a Python script that generates fictional procurement records for analysis.
+
+Run the following command from the project root:
+
+```bash
+python scripts/generate_synthetic_data.py
+
+```
+
+### 2. Prepare the PostgreSQL Database
+
+Create a PostgreSQL database and execute the following scripts in order:
+
+1. `sql/01_create_schemas.sql`
+2. `sql/02_create_raw_tables.sql`
+3. `sql/03_import_csv.sql`
+4. `sql/04_load_raw.sql`
+5. `sql/05_create_staging.sql`
+6. `sql/06_data_quality_checks.sql`
+
+Import the generated synthetic CSV into the import table using the procedure described in `03_import_csv.sql` before executing `04_load_raw.sql`.
+
+### 3. Run the Analytical Queries
+
+Execute the SQL scripts in `sql/analytics/` to explore procurement spend, supplier concentration, monthly trends, currency distribution and planned lead times.
+
+### 4. Explore the Power BI Results
+
+The `screenshots/` folder contains the procurement dashboard and supplier Pareto visualisation.
+
+The `dax/measures.dax` file documents the DAX measures used in the analysis.
+
+Power BI `.pbix` files are excluded from the repository.
