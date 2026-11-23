@@ -4,7 +4,7 @@ SUM('staging purchase_orders'[document_total_usd])
 
 -- Number of purchase orders
 Total Purchase Orders =
-COUNTROWS('staging purchase_orders')
+DISTINCTCOUNT('staging purchase_orders'[po_number])
 
 -- Number of distinct suppliers
 Total Suppliers =
@@ -35,3 +35,40 @@ DATE(
 -- Calculated column: PO year
 PO Year =
 YEAR('staging purchase_orders'[po_date])
+
+
+-- Supplier ranking by total PO spend
+Supplier Rank =
+RANKX(
+    ALLSELECTED('staging purchase_orders'[vendor]),
+    [Total PO Value USD],
+    ,
+    DESC,
+    DENSE
+)
+
+-- Cumulative supplier spend percentage
+Cumulative Spend % =
+VAR CurrentRank = [Supplier Rank]
+VAR SupplierList =
+    ADDCOLUMNS(
+        ALLSELECTED('staging purchase_orders'[vendor]),
+        "@Spend", [Total PO Value USD]
+    )
+VAR CumulativeSpend =
+    SUMX(
+        TOPN(
+            CurrentRank,
+            SupplierList,
+            [@Spend], DESC,
+            'staging purchase_orders'[vendor], ASC
+        ),
+        [@Spend]
+    )
+VAR TotalSpend =
+    SUMX(SupplierList, [@Spend])
+RETURN
+    DIVIDE(CumulativeSpend, TotalSpend)
+
+-- Pareto reference line
+Pareto 80% Target = 0.8

@@ -4,23 +4,36 @@
 
 ## Project Overview
 
-An end-to-end procurement analytics portfolio project analysing 14,037 purchase orders dated February 2022 to December 2025 across three anonymised mining operations.
+An end-to-end procurement analytics portfolio project using a fully synthetic dataset of 14,500 purchase orders across three fictional mining operations from 2022 to 2025.
 
-The project demonstrates data preparation, SQL-based analysis, data-quality validation and interactive Power BI reporting.
+The dataset was independently generated using Python to simulate realistic procurement patterns, including multi-currency purchasing, supplier concentration, spend variation and planned lead times.
+
+The project demonstrates data generation, PostgreSQL data modelling, SQL-based analysis, data-quality validation, Power BI dashboard development and supplier Pareto analysis.
+
+All purchase-order records, suppliers, mining operations and financial values are fictional. The published project does not use original company transaction records.
 
 ## Dashboard Preview
 
-![Procurement Analytics Dashboard](screenshots/dashboard_overview.png)
+### Procurement Overview Dashboard
+
+![Procurement Overview Dashboard](screenshots/dashboard_overview.png)
+
+### Supplier Spend Pareto Analysis
+
+![Supplier Spend Pareto Analysis](screenshots/supplier_pareto.png)
 
 ## Key Metrics
 
+**Purchase-order grain:** Each staging-table record represents one distinct purchase order. Therefore, the 14,037 record count is also the unique purchase-order count.
+
 | Metric | Result |
 |---|---:|
-| Purchase Orders | 14,037 |
-| Total PO Value (USD Equivalent) | $588.01M |
-| Unique Suppliers | 933 |
-| Average Planned Lead Time | 40.12 days |
-| Negative Planned Lead-Time Records | 77 (0.55%) |
+| Purchase Orders | 14,500 |
+| Total PO Value (USD Equivalent) | $416.79M |
+| Unique Suppliers | 350 |
+| Average Planned Lead Time | 40.85 days |
+| Negative Planned Lead-Time Records | 91 |
+| Period | 2022–2025 |
 
 ## Business Questions
 
@@ -97,15 +110,30 @@ Procurement-Spend-Analytics/
 
 ## Data Availability
 
-The underlying purchase-order dataset is not publicly distributed to protect confidential business information.
+The dataset is fully synthetic and reproducible using scripts/generate_synthetic_data.py.
 
-The Power BI `.pbix` file is also excluded from the public repository because it contains imported row-level data.
+The project generates 14,500 fictional purchase orders covering 350 suppliers and three fictional mining operations.
 
-The repository includes SQL scripts, DAX measures, project documentation and a dashboard screenshot to demonstrate the analytical methodology and reporting capabilities.
+The Power BI .pbix file is excluded from the repository. SQL scripts, DAX measures, Python generation code and anonymised dashboard screenshots are provided to demonstrate the analytical workflow.
+
+## Supplier Pareto Analysis
+
+Supplier spend concentration was analysed using SQL window functions and Power BI DAX measures.
+
+**Key findings from the complete synthetic dataset:**
+
+- Total suppliers: **350**
+- Suppliers accounting for approximately 80% of spend: **57**
+- Share of supplier base: **16.29%**
+- Cumulative spend represented: **80.02%**
+
+The analysis demonstrates how supplier concentration can inform strategic sourcing priorities, supplier relationship management and dependency-risk assessments.
+
+The Power BI Pareto visual includes supplier spend rankings, cumulative spend percentages and an 80% reference line.
 
 ## Future Improvements
 
-- Supplier concentration and Pareto analysis
+- Supplier segmentation and concentration risk assessment
 - Year-over-year procurement value comparisons
 - Additional data-quality checks
 - Supplier performance analysis using actual delivery dates when available

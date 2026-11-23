@@ -30,5 +30,6 @@ SELECT
     po_number_raw,
     cod_ll_ke_raw,
     invoice_processed_raw,
-    'procurement_purchase_orders.csv'
-FROM raw.import_purchase_orders;
+    'synthetic_purchase_orders.csv'
+FROM raw.import_purchase_orders
+ON CONFLICT (source_file_name, source_row_id_raw) DO NOTHING;

@@ -16,9 +16,13 @@ CREATE TABLE IF NOT EXISTS raw.import_purchase_orders (
     invoice_processed_raw TEXT
 );
 
--- Import procurement_purchase_orders.csv into this table
+-- Import data/synthetic_purchase_orders.csv into this table
 -- using pgAdmin's Import/Export Data interface.
 --
 -- Format: CSV
 -- Header: Yes
 -- Encoding: UTF-8
+
+-- Clear the temporary landing table before importing a new CSV.
+-- This does not delete data from raw.purchase_orders_raw.
+TRUNCATE TABLE raw.import_purchase_orders;

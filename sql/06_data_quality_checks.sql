@@ -23,3 +23,14 @@ SELECT
         AS raw_records,
     (SELECT COUNT(*) FROM staging.purchase_orders)
         AS staging_records;
+
+-- Check that each PO number occurs only once
+SELECT
+    po_number,
+    COUNT(*) AS record_count
+FROM staging.purchase_orders
+WHERE po_number IS NOT NULL
+  AND po_number <> ''
+GROUP BY po_number
+HAVING COUNT(*) > 1
+ORDER BY record_count DESC, po_number;
